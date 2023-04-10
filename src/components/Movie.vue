@@ -5,11 +5,11 @@
       <span class="M-title">{{ movie.name }}</span>
       <hr class="hrt" />
       <!-- 视频 -->
-      <canvas id="dm" ref="cas"></canvas>
+      <!-- <canvas id="dm" ref="cas"></canvas> -->
       <video class="BigVideo" id="MovieSource" controls ref="ms">
         <source :src="movie.source" />
       </video>
-
+      <div class="dzl"></div>
       <!-- 评论区 -->
       <div class="infP">
         <h2 class="pl">全部评论 &nbsp;{{ discussList.total }}</h2>
@@ -141,7 +141,6 @@
 <script setup>
 import NavigationBar from "../components/element/NavigationBar.vue";
 import "vue3-video-play/dist/style.css";
-import dm from "../utils/dm.js";
 import { onMounted, reactive, ref, watch, getCurrentInstance } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
@@ -152,12 +151,12 @@ import {
   replyApi,
   getRecommendApi,
 } from "/src/utils/api.js";
-
+import store from "./pinia/store";
 const $route = useRoute();
 const $router = useRouter();
+let disDemo = reactive();
 let text = ref();
 let replyText = ref();
-let inV = ref();
 let movie = reactive(await getMovieIdApi($route.query.Mid)).data.resultData;
 //分页
 let discussList = reactive(await getMovieDiscussById($route.query.Mid)).data
@@ -198,7 +197,7 @@ const submitDiscuss = () => {
     comment: text.value,
   };
   sendMovieDiscuss(discuss);
-  window.location.reload();
+  discussList.list.push();
 };
 //发送回复
 const submitReply = (value) => {
@@ -215,57 +214,8 @@ const submitReply = (value) => {
   };
   replyApi(reply);
 };
-
-onMounted(() => {
-  //value 弹幕内容 fontsize 弹幕大小 color 弹幕颜色 time 弹幕时间 speed 弹幕速度
-  const getData = (len) => {
-    let data = [];
-    for (let index = 0; index < len; index++) {
-      data.push({
-        value: "第" + index + "条弹幕",
-        fontSize: 18,
-        color: "red",
-        time: index,
-        speed: 1,
-      });
-    }
-    return data;
-  };
-  let data = getData(2);
-  let ms = ref(null);
-  let cas = ref(null);
-  let pg = getCurrentInstance();
-  let msInstance = pg.refs.ms;
-  let casInstance = pg.refs.cas;
-  //弹幕实例
-  let bg = new dm({
-    casInstance,
-    msInstance,
-    data,
-  });
-  //播放视频
-  msInstance.addEventListener("play", () => {
-    bg.isPlay = true;
-    //弹幕滚动
-    bg.render();
-  });
-  //暂停视频
-  msInstance.addEventListener("pause", () => {
-    //暂停弹幕
-    bg.pause();
-  });
-  let option = {
-    color: "#cccccc",
-    fontSize: 26,
-  };
-  // 点击发送，插入数据
-  submit.addEventListener("click", () => {
-    option.time = msInstance.currentTime;
-    bg.setBarrage(option);
-    inV.value = "";
-  });
-});
 </script>
+
 <style scoped>
 a {
   color: #333;
@@ -340,7 +290,7 @@ a {
   justify-content: space-between;
 }
 .infP {
-  margin-top: 20px;
+  margin-top: 5px;
   width: 950px;
   background-color: white;
   padding-top: 10px;
@@ -465,5 +415,10 @@ li {
   /* top: 150px;
   left: 170px; */
   border: 1px solid red;
+}
+.dzl {
+  width: 1000px;
+  height: 50px;
+  background-color: white;
 }
 </style>
