@@ -50,7 +50,7 @@ list.forEach((element) => {
 });
 </script>
 
-<style>
+<style scoped>
 .tp {
   background-color: white;
   width: 1500px;

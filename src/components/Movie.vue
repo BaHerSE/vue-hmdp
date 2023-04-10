@@ -4,13 +4,11 @@
     <div class="work-left">
       <span class="M-title">{{ movie.name }}</span>
       <hr class="hrt" />
-
       <!-- 视频 -->
-      <videoPlay
-        v-bind="option"
-        class="videoPlay"
-        :src="movie.source"
-      ></videoPlay>
+      <canvas id="dm" ref="cas"></canvas>
+      <video class="BigVideo" id="MovieSource" controls ref="ms">
+        <source :src="movie.source" />
+      </video>
 
       <!-- 评论区 -->
       <div class="infP">
@@ -140,12 +138,11 @@
     </div>
   </div>
 </template>
-
 <script setup>
 import NavigationBar from "../components/element/NavigationBar.vue";
 import "vue3-video-play/dist/style.css";
-import { videoPlay } from "vue3-video-play";
-import { reactive, ref, watch } from "vue";
+import dm from "../utils/dm.js";
+import { onMounted, reactive, ref, watch, getCurrentInstance } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import {
   getMovieIdApi,
@@ -155,16 +152,17 @@ import {
   replyApi,
   getRecommendApi,
 } from "/src/utils/api.js";
+
 const $route = useRoute();
 const $router = useRouter();
 let text = ref();
 let replyText = ref();
+let inV = ref();
 let movie = reactive(await getMovieIdApi($route.query.Mid)).data.resultData;
 //分页
 let discussList = reactive(await getMovieDiscussById($route.query.Mid)).data
   .resultData;
 let movieList = reactive(await getRecommendApi()).data.resultData;
-console.log(movieList);
 if ($route.query.page != undefined) {
   discussList = reactive(
     await getMovieDiscussByIdMore(
@@ -178,30 +176,7 @@ let urlPrefix = ref(`/Movie?page=1` + `&size=20&Mid=` + $route.query.Mid);
 let urlSuffix = ref(
   `/Movie?page=` + discussList.pages + `&size=20&Mid=` + $route.query.Mid
 );
-//播放器
-const option = reactive({
-  width: "1000px", //播放器高度
-  height: "600px", //播放器高度
-  color: "#409eff", //主题色
-  title: "", //视频名称
-  //视频源
-  muted: false, //静音
-  webFullScreen: false,
-  speedRate: ["0.75", "1.0", "1.25", "1.5", "2.0"], //播放倍速
-  autoPlay: false, //自动播放
-  loop: false, //循环播放
-  mirror: false, //镜像画面
-  ligthOff: true, //关灯模式
-  volume: 0.3, //
-  control: true, //是否显示控制器
-});
-const option2 = reactive({
-  width: "150px", //播放器高度
-  height: "80px", //播放器高度
-  color: "#409eff", //主题色
-  volume: 0, //
-  control: false, //是否显示控制器
-});
+//回复聊天框启动
 const changeHF = (value) => {
   if (document.getElementById(value).style.display == "none") {
     document.getElementById(value).style.display = "block";
@@ -209,7 +184,7 @@ const changeHF = (value) => {
     document.getElementById(value).style.display = "none";
   }
 };
-
+//发送消息
 const submitDiscuss = () => {
   if (text.value == undefined) {
     alert("不能为空");
@@ -225,6 +200,7 @@ const submitDiscuss = () => {
   sendMovieDiscuss(discuss);
   window.location.reload();
 };
+//发送回复
 const submitReply = (value) => {
   if (replyText.value == undefined) {
     alert("不能为空");
@@ -239,8 +215,57 @@ const submitReply = (value) => {
   };
   replyApi(reply);
 };
-</script>
 
+onMounted(() => {
+  //value 弹幕内容 fontsize 弹幕大小 color 弹幕颜色 time 弹幕时间 speed 弹幕速度
+  const getData = (len) => {
+    let data = [];
+    for (let index = 0; index < len; index++) {
+      data.push({
+        value: "第" + index + "条弹幕",
+        fontSize: 18,
+        color: "red",
+        time: index,
+        speed: 1,
+      });
+    }
+    return data;
+  };
+  let data = getData(2);
+  let ms = ref(null);
+  let cas = ref(null);
+  let pg = getCurrentInstance();
+  let msInstance = pg.refs.ms;
+  let casInstance = pg.refs.cas;
+  //弹幕实例
+  let bg = new dm({
+    casInstance,
+    msInstance,
+    data,
+  });
+  //播放视频
+  msInstance.addEventListener("play", () => {
+    bg.isPlay = true;
+    //弹幕滚动
+    bg.render();
+  });
+  //暂停视频
+  msInstance.addEventListener("pause", () => {
+    //暂停弹幕
+    bg.pause();
+  });
+  let option = {
+    color: "#cccccc",
+    fontSize: 26,
+  };
+  // 点击发送，插入数据
+  submit.addEventListener("click", () => {
+    option.time = msInstance.currentTime;
+    bg.setBarrage(option);
+    inV.value = "";
+  });
+});
+</script>
 <style scoped>
 a {
   color: #333;
@@ -255,6 +280,7 @@ a {
 }
 .work-left {
   width: 1000px;
+  position: relative;
 }
 .work-right {
   width: 300px;
@@ -425,9 +451,19 @@ li {
   margin-bottom: 10px;
   display: flex;
 }
-.tjName{
+.tjName {
   font-size: 15px;
   margin-left: 5px;
   font-weight: 600;
+}
+.BigVideo {
+  width: 1000px;
+  height: 564px;
+}
+#dm {
+  position: absolute;
+  /* top: 150px;
+  left: 170px; */
+  border: 1px solid red;
 }
 </style>
