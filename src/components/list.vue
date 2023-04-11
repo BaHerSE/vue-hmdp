@@ -113,7 +113,14 @@
         </div>
       </div>
       <div class="plq">
-        <a class="in-in">{{ movie.name }}的短评 · · · · · · </a>
+        <a class="in-in">
+          <router-link
+            class="in-in"
+            :to="{ path: '/allBlog', query: { id: movie.id } }"
+          >
+            {{ movie.name }}的短评 · · · · · ·
+          </router-link>
+        </a>
         <span>( 全部 {{ blogList.length }} 条 )</span>
         <div class="blogList" v-for="blog in blogList" :key="blog.id">
           <div class="bl-top">

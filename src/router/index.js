@@ -32,6 +32,7 @@ import adminCinecism from '../components/element/admin-cinecism.vue'
 import adminDiscuss from '../components/element/admin-discuss.vue'
 import adminBlog from '../components/element/admin-blog.vue'
 import allCinecism from '../components/AllCinecism.vue'
+import allBlog from '../components/AllBlog.vue'
 import genreSearch from '../components/GenreSearch.vue'
 import adminLogin from '../components/admin/adminLogin.vue'
 import billUpload from '../components/element/bill-upload.vue'
@@ -95,6 +96,11 @@ const router = createRouter({
             path: '/navBar',
             name: 'navBar',
             component: NavigationBar
+        },
+        {
+            path: "/allBlog",
+            name: 'allBlog',
+            component: allBlog
         },
         {
             path: "/allCinecism",

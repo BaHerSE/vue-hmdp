@@ -250,3 +250,6 @@ export function getMovieVideoPart(id) {
 export function getAllMovieVideo(id) {
     return request.get("/Movie/getAllMovieVideo?id=" + id)
 }
+export function getAllBlog(id, page) {
+    return request.get("/Blog/getAllBlog?id=" + id + "&page=" + page)
+}
