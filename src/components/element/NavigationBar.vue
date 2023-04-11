@@ -37,7 +37,10 @@ import { reactive, ref } from "@vue/reactivity";
 import { useRouter } from "vue-router";
 import { loginUserApi, getUserApi, userAgainApi } from "/src/utils/api.js";
 import { yzmApi, yzApi, createUserApi } from "/src/utils/api.js";
-
+import store from "../pinia/store";
+import { storeToRefs } from "pinia";
+const mainStore = store();
+let { id, nickName, icon } = storeToRefs(mainStore);
 const flag = ref(false);
 const route = useRouter();
 const userInf = ref("");
@@ -45,9 +48,6 @@ const newPhone = ref("");
 const code = ref("");
 const searchValue = ref("");
 const inputValue = ref("");
-const yzmInputValue = ref("");
-const password = ref("");
-const passwordAgain = ref("");
 const option = [
   { label: "电影", value: "1" },
   { label: "用户", value: "2" },
@@ -55,6 +55,14 @@ const option = [
 ];
 getUserApi().then((result) => {
   userInf.value = result.data.resultData;
+  mainStore.$patch({
+    id: userInf.value.id,
+    nickName: userInf.value.nickName,
+    icon: userInf.value.icon,
+  });
+  // mainStore.id = userInf.value.id;
+  // mainStore.nickName = userInf.value.nickName;
+  // mainStore.icon = userInf.value.icon;
 });
 const select = () => {
   if (searchValue.value.trim() == "") {

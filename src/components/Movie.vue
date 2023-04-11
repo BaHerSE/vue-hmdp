@@ -154,9 +154,37 @@ import {
 import store from "./pinia/store";
 const $route = useRoute();
 const $router = useRouter();
-let disDemo = reactive();
+const mainStore = store();
 let text = ref();
 let replyText = ref();
+const getTime = () => {
+  let timeNow = new Date();
+  let ct =
+    timeNow.getFullYear() +
+    "-" +
+    timeNow.getMonth() +
+    "-" +
+    timeNow.getDay() +
+    "T" +
+    timeNow.getHours() +
+    ":" +
+    timeNow.getMinutes() +
+    ":" +
+    timeNow.getSeconds();
+  return ct;
+};
+let disDemo = reactive({
+  movieId: $route.query.Mid,
+  comment: text.value,
+  createTime: getTime(),
+  user: {
+    id: mainStore.id,
+    nickName: mainStore.nickName,
+    icon: mainStore.icon,
+  },
+  replyList: [{}],
+});
+
 let movie = reactive(await getMovieIdApi($route.query.Mid)).data.resultData;
 //分页
 let discussList = reactive(await getMovieDiscussById($route.query.Mid)).data
@@ -197,7 +225,7 @@ const submitDiscuss = () => {
     comment: text.value,
   };
   sendMovieDiscuss(discuss);
-  discussList.list.push();
+  discussList.list.push(disDemo);
 };
 //发送回复
 const submitReply = (value) => {
