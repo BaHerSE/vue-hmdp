@@ -68,8 +68,8 @@ const $route = useRoute();
 let cinecism = (await getCinecismByIdApi($route.query.id)).data.resultData;
 let movie = reactive(await getMovieIdApi(cinecism.movieId)).data.resultData;
 let author = reactive(await getUserByIdApi(cinecism.userId)).data.resultData;
-let discussList = reactive(await getDiscussByIdApi(cinecism.id)).data
-  .resultData;
+// let discussList = reactive(await getDiscussByIdApi(cinecism.id)).data
+//   .resultData;
 </script>
 
 <style scoped>

@@ -235,6 +235,7 @@ const flash = (gen) => {
   margin: auto;
   background-color: white;
   text-align: center;
+  padding-top: 20px;
 }
 .select h1 {
   margin-bottom: 0;

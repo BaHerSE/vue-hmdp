@@ -3,7 +3,11 @@
   <div class="work">
     <div class="work-left">
       <div v-for="cin in cinecism.list" :key="cin.id" class="articlework">
-        <h2 class="title">{{ cin.title }}</h2>
+        <h2 class="title">
+          <router-link :to="{ path: '/Article', query: { id: cin.id } }">
+            {{ cin.title }}
+          </router-link>
+        </h2>
         <div class="xx">
           <img :src="author.icon" alt="" class="authIcon" />
           &nbsp;

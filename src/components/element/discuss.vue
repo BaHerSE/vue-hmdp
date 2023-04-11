@@ -53,14 +53,42 @@ import {
   getDiscussByIdApi,
   sendDiscussApi,
   getDiscussMoreByIdApi,
+  getUserApi,
 } from "/src/utils/api.js";
 import { reactive, ref } from "@vue/reactivity";
 const $route = useRoute();
 let discussList = reactive();
-
+const getTime = () => {
+  let timeNow = new Date();
+  let ct =
+    timeNow.getFullYear() +
+    "-" +
+    timeNow.getMonth() +
+    "-" +
+    timeNow.getDay() +
+    "T" +
+    timeNow.getHours() +
+    ":" +
+    timeNow.getMinutes() +
+    ":" +
+    timeNow.getSeconds();
+  return ct;
+};
+const uI = ref("");
+getUserApi().then((result) => {
+  uI.value = result.data.resultData;
+});
 discussList = reactive(await getDiscussByIdApi($route.query.id)).data
   .resultData;
-
+let disDemo = reactive({
+  comment: "",
+  createTime: getTime(),
+  user: {
+    id: 0,
+    icon: "",
+    nickName: "",
+  },
+});
 if ($route.query.page != undefined) {
   discussList = reactive(
     await getDiscussMoreByIdApi(
@@ -84,7 +112,11 @@ const submit = (value) => {
     comment: text.value,
   };
   sendDiscussApi(discuss);
-  window.location.reload();
+  disDemo.comment = text.value;
+  disDemo.user.id = uI.value.id;
+  disDemo.user.nickName = uI.value.nickName;
+  disDemo.user.icon = uI.value.icon;
+  discussList.list.unshift(disDemo);
 };
 let urlPrefix = ref(`/Article?page=1` + `&size=10&id=` + $route.query.id);
 let urlSuffix = ref(

@@ -24,7 +24,12 @@
         ></textarea>
         <t-button class="submit" v-on:click="submitDiscuss">发送</t-button>
         <div class="plq">
-          <div v-for="dis in discussList.list" :key="dis.id" class="plq-ltq">
+          <div
+            v-for="(dis, index) in discussList.list"
+            :key="dis.id"
+            :index="index"
+            class="plq-ltq"
+          >
             <div class="p1">
               <img :src="dis.user.icon" alt="" class="icon" />
               <div class="ltq">
@@ -52,7 +57,7 @@
                 ></textarea>
                 <t-button
                   style="margin-top: -25px; margin-left: 15px"
-                  v-on:click="submitReply(dis.id)"
+                  v-on:click="submitReply(dis.id, index)"
                 >
                   发送
                 </t-button>
@@ -178,6 +183,16 @@ const getTime = () => {
     timeNow.getSeconds();
   return ct;
 };
+let repDemo = reactive({
+  mdId: 0,
+  comment: "",
+  createTime: getTime(),
+  user: {
+    id: 0,
+    nickName: "",
+    icon: "",
+  },
+});
 let disDemo = reactive({
   movieId: $route.query.Mid,
   comment: "",
@@ -233,10 +248,10 @@ const submitDiscuss = () => {
   disDemo.user.nickName = uI.value.nickName;
   disDemo.user.icon = uI.value.icon;
   disDemo.comment = text.value;
-  discussList.list.push(disDemo);
+  discussList.list.unshift(disDemo);
 };
 //发送回复
-const submitReply = (value) => {
+const submitReply = (value, index) => {
   if (replyText.value == undefined) {
     alert("不能为空");
     return;
@@ -249,6 +264,11 @@ const submitReply = (value) => {
     comment: replyText.value,
   };
   replyApi(reply);
+  repDemo.user.id = uI.value.id;
+  repDemo.user.nickName = uI.value.nickName;
+  repDemo.user.icon = uI.value.icon;
+  repDemo.comment = replyText.value;
+  discussList.list[0].replyList.unshift(repDemo);
 };
 </script>
 

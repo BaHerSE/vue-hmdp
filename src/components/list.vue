@@ -222,13 +222,13 @@
         <t-rate size="14" class="df" v-model="pjValue"></t-rate>
       </div>
       <br />
-      <t-input
+      <!-- <t-input
         placeholder="请输入标题"
         :maxlength="10"
         size="small"
         v-model="pjTitle"
       ></t-input>
-      <br />
+      <br /> -->
       <textarea
         maxlength="150"
         name=""
@@ -296,9 +296,6 @@ const close = () => {
 const onConfirm = () => {
   if (blog.star == 0) {
     alert("请打分");
-    return;
-  } else if (blog.title == null) {
-    alert("标题不能为空");
     return;
   } else if (blog.article == null) {
     alert("内容不能为空");
