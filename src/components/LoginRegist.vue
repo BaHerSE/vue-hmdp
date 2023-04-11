@@ -64,7 +64,14 @@
 
 <script setup>
 import { reactive, ref } from "@vue/reactivity";
-import { yzmApi, yzApi, loginUserApi, createUserApi } from "/src/utils/api.js";
+import {
+  yzmApi,
+  yzApi,
+  loginUserApi,
+  createUserApi,
+  getUserApi,
+} from "/src/utils/api.js";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 const $router = useRouter();
 const visible = ref(true);
@@ -74,6 +81,7 @@ const yzmInputValue = ref("");
 const flag = ref(false);
 const password = ref("");
 const passwordAgain = ref("");
+const userInf = ref("");
 const change = () => {
   visible.value = false;
   visible2.value = true;
@@ -85,7 +93,7 @@ const yzm = (phone) => {
   }, 60000);
   flag.value = true;
 };
-
+//登录
 const login = () => {
   if (yzmInputValue.value == "") {
     alert("验证码不能为空");
@@ -104,6 +112,8 @@ const login = () => {
     }
   });
 };
+
+//注册
 const regist = () => {
   if (yzmInputValue.value == "") {
     alert("验证码不能为空");

@@ -55,14 +55,6 @@ const option = [
 ];
 getUserApi().then((result) => {
   userInf.value = result.data.resultData;
-  mainStore.$patch({
-    id: userInf.value.id,
-    nickName: userInf.value.nickName,
-    icon: userInf.value.icon,
-  });
-  // mainStore.id = userInf.value.id;
-  // mainStore.nickName = userInf.value.nickName;
-  // mainStore.icon = userInf.value.icon;
 });
 const select = () => {
   if (searchValue.value.trim() == "") {

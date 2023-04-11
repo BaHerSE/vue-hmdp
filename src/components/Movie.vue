@@ -62,7 +62,7 @@
               <div class="reply" v-for="rep in dis.replyList" :key="rep.id">
                 <img :src="rep.user.icon" alt="" class="icon" />
                 <div class="ltq">
-                  <span class="name">{{ rep.nickName }}</span>
+                  <span class="name">{{ rep.user.nickName }}</span>
                   &nbsp;
                   <span class="time">{{ rep.createTime }}</span>
                   <hr class="jg" />
@@ -149,14 +149,19 @@ import {
   getMovieDiscussByIdMore,
   sendMovieDiscuss,
   replyApi,
+  getUserApi,
   getRecommendApi,
 } from "/src/utils/api.js";
 import store from "./pinia/store";
 const $route = useRoute();
 const $router = useRouter();
+const uI = ref("");
 const mainStore = store();
 let text = ref();
 let replyText = ref();
+getUserApi().then((result) => {
+  uI.value = result.data.resultData;
+});
 const getTime = () => {
   let timeNow = new Date();
   let ct =
@@ -175,16 +180,15 @@ const getTime = () => {
 };
 let disDemo = reactive({
   movieId: $route.query.Mid,
-  comment: text.value,
+  comment: "",
   createTime: getTime(),
   user: {
-    id: mainStore.id,
-    nickName: mainStore.nickName,
-    icon: mainStore.icon,
+    id: 0,
+    nickName: "",
+    icon: "",
   },
   replyList: [{}],
 });
-
 let movie = reactive(await getMovieIdApi($route.query.Mid)).data.resultData;
 //分页
 let discussList = reactive(await getMovieDiscussById($route.query.Mid)).data
@@ -225,6 +229,10 @@ const submitDiscuss = () => {
     comment: text.value,
   };
   sendMovieDiscuss(discuss);
+  disDemo.user.id = uI.value.id;
+  disDemo.user.nickName = uI.value.nickName;
+  disDemo.user.icon = uI.value.icon;
+  disDemo.comment = text.value;
   discussList.list.push(disDemo);
 };
 //发送回复
