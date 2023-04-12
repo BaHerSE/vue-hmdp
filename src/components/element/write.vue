@@ -9,7 +9,7 @@
         <!-- <span class="title">{{ cin.title }}</span> -->
         <span v-html="cin.article"></span>
       </div>
-      <div class="time-like">
+      <div class="time-like" v-show="flag == true">
         <span>{{ cin.createTime.replace("T", " ") }}</span>
         <router-link
           :to="{ path: '/reCinecism', query: { Mid: cin.movieId, id: cin.id } }"
@@ -46,7 +46,7 @@
 </template>
 
 <script setup>
-import { getCinecismByUserApi, delCinApi } from "/src/utils/api.js";
+import { getCinecismByUserApi, delCinApi, isUserApi } from "/src/utils/api.js";
 import { useRouter, useRoute } from "vue-router";
 import { reactive, ref } from "@vue/reactivity";
 
@@ -55,6 +55,7 @@ const $route = useRoute();
 let cinecism = ref();
 let blog = ref();
 // let cinecism = (await getCinecismByUserApi($route.query.id)).data.resultData;
+const flag = reactive(await isUserApi($route.query.id)).data.resultData;
 if ($route.query.page) {
   cinecism = (
     await getCinecismByUserApi(

@@ -3,11 +3,16 @@
     <img :src="cin.image" alt="" class="hb" />
     <div class="pl-k">
       <div class="pl">
-        <span class="title">{{ cin.title }}</span>
+        <!-- <span class="title">{{ cin.title }}</span> -->
+        <!-- <br /> -->
+        <t-rate :default-value="cin.star" size="14" disabled /><span
+          class="cT"
+          >{{ cin.createTime.replace("T", " ") }}</span
+        >
         <br />
         <span class="article">{{ cin.article }}</span>
       </div>
-      <div class="time-like">
+      <div class="time-like" v-show="flag == true">
         <img
           src="/src/img/delete.png"
           alt=""
@@ -37,13 +42,12 @@
 </template>
   
   <script setup>
-import { getBlogByUserApi, delBlogApi } from "/src/utils/api.js";
+import { getBlogByUserApi, isUserApi, delBlogApi } from "/src/utils/api.js";
 import { useRouter, useRoute } from "vue-router";
 import { reactive, ref } from "@vue/reactivity";
-
 const $router = useRouter();
 const $route = useRoute();
-
+const flag = reactive(await isUserApi($route.query.id)).data.resultData;
 let blog = ref();
 if ($route.query.page) {
   blog = (
@@ -100,7 +104,7 @@ a {
 }
 .pl {
   height: 85px;
-  overflow: hidden;
+  /* overflow: hidden; */
   text-overflow: ellipsis;
   display: -webkit-box;
   /* -webkit-line-clamp: 2; */
@@ -114,5 +118,8 @@ a {
   margin-top: 5px;
   float: right;
   cursor: pointer;
+}
+.cT {
+  font-size: 13px;
 }
 </style>

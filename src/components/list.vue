@@ -309,8 +309,11 @@ const onConfirm = () => {
     return;
   }
   saveBlogApi(blog).then((result) => {
-    location.reload();
-    // $router.push({ path: "/list", query: { Mid: $route.query.Mid } });
+    if (result.data.resultData == false) {
+      alert("您已经写过短评了！");
+    } else {
+      location.reload();
+    }
   });
   visible.value = false;
 };

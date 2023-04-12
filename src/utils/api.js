@@ -207,8 +207,8 @@ export function getAllCinecismApi() {
 export function getAllCinecismMoreApi(page) {
     return request.get("/Blog/getAllCinecism?page=" + page)
 }
-export function getAllCinecismByMidApi(id) {
-    return request.get("/Blog/getAllCinecismByMid?id=" + id)
+export function getAllCinecismByMidApi(id, page) {
+    return request.get("/Blog/getAllCinecismByMid?id=" + id + "&page=" + page)
 }
 export function getAllCinecismByMidMoreApi(id, page) {
     return request.get("/Blog/getAllCinecismByMid?id=" + id + "&page=" + page)
@@ -252,4 +252,13 @@ export function getAllMovieVideo(id) {
 }
 export function getAllBlog(id, page) {
     return request.get("/Blog/getAllBlog?id=" + id + "&page=" + page)
+}
+export function getAllBlogByStar(id, page, star) {
+    return request.get("/Blog/getAllBlogByStar?id=" + id + "&page=" + page + "&star=" + star)
+}
+export function getAllCinecismByMidStar(id, page, star) {
+    return request.get("/Blog/getAllCinecismByMidStar?id=" + id + "&page=" + page + "&star=" + star)
+}
+export function getAllCinecismByMidFriend(id, page, friend) {
+    return request.get("/Blog/getAllCinecismByMidFriend?id=" + id + "&page=" + page + "&friend=" + friend)
 }
