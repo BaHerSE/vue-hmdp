@@ -37,6 +37,7 @@
           <template #icon>
             <t-icon name="file" />
           </template>
+
           <t-menu-item value="3-1">
             <span>
               <router-link :to="{ path: '/Admin/index/adminCinecism' }">
@@ -69,7 +70,6 @@
 }
 .work-left {
   /* height: 1018px; */
-  
 }
 .work-right {
   margin-left: 50px;
