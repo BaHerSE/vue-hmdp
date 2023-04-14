@@ -181,6 +181,7 @@
 <script setup>
 import {
   getAllMovieApi,
+  getAllGenre,
   getAllMovieMoreApi,
   addMovieApi,
   uploadMovieImageApi,
@@ -196,6 +197,7 @@ const visible2 = ref(false);
 const $route = useRoute();
 const $router = useRouter();
 let movieList = ref();
+let typeList = reactive(await getAllGenre()).data.resultData;
 if ($route.query.page) {
   movieList = (await getAllMovieMoreApi($route.query.page)).data.resultData;
 } else {
@@ -213,26 +215,29 @@ const addMovie = () => {
 };
 
 //select
-const OPTIONS = [
+let OPTIONS = [
   // 全选
   { label: "Check All", checkAll: true },
-  { label: "剧情", value: 1 },
-  { label: "喜剧", value: 2 },
-  { label: "动作", value: 3 },
-  { label: "爱情", value: 4 },
-  { label: "科幻", value: 5 },
-  { label: "动画", value: 6 },
-  { label: "悬疑", value: 7 },
-  { label: "惊悚", value: 8 },
-  { label: "记录片", value: 9 },
-  { label: "战争", value: 10 },
-  { label: "灾难", value: 11 },
-  { label: "武侠", value: 12 },
-  { label: "运动", value: 13 },
-  { label: "历史", value: 14 },
-  { label: "恐怖", value: 15 },
+  // { label: "剧情", value: 1 },
+  // { label: "喜剧", value: 2 },
+  // { label: "动作", value: 3 },
+  // { label: "爱情", value: 4 },
+  // { label: "科幻", value: 5 },
+  // { label: "动画", value: 6 },
+  // { label: "悬疑", value: 7 },
+  // { label: "惊悚", value: 8 },
+  // { label: "记录片", value: 9 },
+  // { label: "战争", value: 10 },
+  // { label: "灾难", value: 11 },
+  // { label: "武侠", value: 12 },
+  // { label: "运动", value: 13 },
+  // { label: "历史", value: 14 },
+  // { label: "恐怖", value: 15 },
 ];
-
+for (let index = 0; index < typeList.length; index++) {
+  console.log(typeList[index].type);
+  OPTIONS.push({ label: typeList[index].type, value: typeList[index].id });
+}
 const excessTagsDisplayType = ref("scroll");
 const allowInput = ref(false);
 const creatable = ref(false);
@@ -283,9 +288,6 @@ const onTagChange = (currentTags, context) => {
     options.value = newOptions;
     inputValue.value = "";
   }
-};
-const onInputChange = (val, context) => {
-  console.log(val, context);
 };
 
 let oneMovie = reactive({

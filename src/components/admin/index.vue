@@ -68,7 +68,8 @@
   display: flex;
 }
 .work-left {
-  height: 100%;
+  /* height: 1018px; */
+  
 }
 .work-right {
   margin-left: 50px;

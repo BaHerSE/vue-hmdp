@@ -118,8 +118,8 @@ export function isWriteCinecismApi(id) {
 export function searchMovieApi(value) {
     return request.get('/Movie/searchMovie?keyWord=' + value)
 }
-export function searchMovieMoreApi(value, page, size) {
-    return request.get('/Movie/searchMovie?keyWord=' + value + '&page=' + page + '&size=' + size)
+export function searchMovieMoreApi(value, page) {
+    return request.get('/Movie/searchMovie?keyWord=' + value + '&page=' + page)
 }
 export function searchCinecismApi(value, page) {
     return request.get('/Blog/searchCinecism?keyWord=' + value + '&page=' + page)
@@ -264,4 +264,7 @@ export function getAllCinecismByMidFriend(id, page, friend) {
 }
 export function searchUserByKeyWord(keyWord, page) {
     return request.get("/user/searchUserByKeyWord?keyWord=" + keyWord + "&page=" + page)
+}
+export function getAllGenre() {
+    return request.get("/Genre/getAllGenre")
 }

@@ -4,10 +4,10 @@
     <h1>搜索内容：{{ $route.query.keyWord }}</h1>
   </div>
   <div class="cineSpace" v-show="$route.query.type == 2">
-    <div v-if="movieList.size == 0" class="no-select">
-      <h2>没有该相关内容</h2>
+    <div v-if="cinecismList.size == 0" class="no-select">
+      <h3 class="h222">没有相关内容</h3>
     </div>
-    <div v-else v-for="cin in cinecismList.list" :key="cin.id" class="">
+    <div v-else v-for="cin in cinecismList.list" :key="cin.id" class="cinList">
       <h2 class="title">
         <router-link :to="{ path: '/Article', query: { id: cin.id } }">
           {{ cin.title }}
@@ -33,9 +33,9 @@
       <br />
     </div>
   </div>
-  <!-- <div class="movieSpace" v-show="$route.query.type == 1">
+  <div class="movieSpace" v-show="$route.query.type == 1">
     <div v-if="movieList.size == 0" class="no-select">
-      <h2>没有该相关内容</h2>
+      <h3 class="h222">没有相关内容</h3>
     </div>
     <div v-else v-for="movie in movieList.list" :key="movie.id" class="movie">
       <img :src="movie.image" alt="" />
@@ -46,19 +46,28 @@
         >
       </span>
     </div>
-  </div> -->
+  </div>
 
-  <!-- <div v-if="movieList.size != 0 && $route.query.type == '1'">
+  <div v-if="movieList.size != 0 && $route.query.type == '1'">
     <ul class="page">
       <li>
-        <a :href="urlPrefix">«</a>
+        <a
+          :href="
+            `/Search?type=` +
+            $route.query.type +
+            `&page=1` +
+            `&keyWord=` +
+            $route.query.keyWord
+          "
+          >«</a
+        >
       </li>
       <li v-for="page in movieList.pages" :key="page">
         <a
           :href="
             `/Search?page=` +
             page +
-            `&size=10&type=` +
+            `&type=` +
             $route.query.type +
             `&keyWord=` +
             $route.query.keyWord
@@ -67,18 +76,64 @@
           {{ page }}
         </a>
       </li>
-      <li><a :href="urlSuffix">»</a></li>
       <li>
-        <span>共</span><span>{{ movieList.pages }}</span
-        ><span>页</span>
+        <a
+          :href="
+            `/Search?type=` +
+            $route.query.type +
+            `&page=` +
+            movieList.pages +
+            `&keyWord=` +
+            $route.query.keyWord
+          "
+          >»</a
+        >
       </li>
     </ul>
-  </div> -->
-  <!-- <div class="userSpace" v-show="$route.query.type == '3'">
-    <div v-for="u in userList.list" :key="u.id">
-      <img :src="u.nickName" alt="" />
-    </div>
-  </div> -->
+  </div>
+  <div v-if="cinecismList.size != 0 && $route.query.type == '2'">
+    <ul class="page">
+      <li>
+        <a
+          :href="
+            `/Search?type=` +
+            $route.query.type +
+            `&page=1` +
+            `&keyWord=` +
+            $route.query.keyWord
+          "
+          >«</a
+        >
+      </li>
+      <li v-for="page in cinecismList.pages" :key="page">
+        <a
+          :href="
+            `/Search?page=` +
+            page +
+            `&type=` +
+            $route.query.type +
+            `&keyWord=` +
+            $route.query.keyWord
+          "
+        >
+          {{ page }}
+        </a>
+      </li>
+      <li>
+        <a
+          :href="
+            `/Search?type=` +
+            $route.query.type +
+            `&page=` +
+            cinecismList.pages +
+            `&keyWord=` +
+            $route.query.keyWord
+          "
+          >»</a
+        >
+      </li>
+    </ul>
+  </div>
   <br />
 </template>
 
@@ -97,14 +152,13 @@ import { random, result } from "lodash";
 const $route = useRoute();
 let movieList = reactive([]);
 let cinecismList = reactive([]);
-let userList = reactive([]);
 if ($route.query.type == 1) {
   if ($route.query.page == undefined) {
-    movieList = reactive(await searchMovieApi($route.query.keyWord)).data
+    movieList = reactive(await searchMovieMoreApi($route.query.keyWord,1)).data
       .resultData;
   } else if ($route.query.page != undefined) {
     movieList = reactive(
-      await searchMovieMoreApi($route.query.keyWord, $route.query.page, 20)
+      await searchMovieMoreApi($route.query.keyWord, $route.query.page)
     ).data.resultData;
   }
 } else if ($route.query.type == 2) {
@@ -118,20 +172,7 @@ if ($route.query.type == 1) {
   }
 }
 
-let urlPrefix = ref(
-  "/Search?page=1&size=10&type=" +
-    $route.query.type +
-    "&keyWord=" +
-    $route.query.keyWord
-);
-let urlSuffix = ref(
-  "/Search?page=" +
-    movieList.pages +
-    "&size=10&type=" +
-    $route.query.type +
-    "&keyWord=" +
-    $route.query.keyWord
-);
+console.log(cinecismList.pages);
 </script>
 
 <style scoped>
@@ -163,7 +204,7 @@ let urlSuffix = ref(
   width: 1200px;
   margin: auto;
   min-height: 1000px;
-  padding-top: 30px;
+  /* padding-top: 30px; */
   padding-bottom: 30px;
   background-color: white;
 }
@@ -222,6 +263,7 @@ a {
 .title {
   color: #333;
   font-weight: 100;
+  margin-top: 0;
 }
 .xx {
   display: flex;
@@ -237,5 +279,14 @@ a {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+}
+.cinList {
+  border-bottom: 1px solid rgb(237 237 237);
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.h222 {
+  margin-top: 0;
+  margin-left: 65px;
 }
 </style>
