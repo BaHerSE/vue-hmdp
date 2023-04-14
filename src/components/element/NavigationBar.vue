@@ -7,7 +7,12 @@
 
       <div class="inp">
         <div class="selectInp">
-          <t-select v-model="inputValue" :options="option" placeholder="电影" />
+          <t-select
+            v-model="inputValue"
+            :options="option"
+            placeholder="电影"
+            defaultInputValue="1"
+          />
         </div>
         <t-input v-model="searchValue" />
       </div>
@@ -48,10 +53,10 @@ const newPhone = ref("");
 const code = ref("");
 const searchValue = ref("");
 const inputValue = ref("");
+let selectValue = ref();
 const option = [
   { label: "电影", value: "1" },
-  { label: "用户", value: "2" },
-  { label: "影评", value: "3" },
+  { label: "影评", value: "2" },
 ];
 getUserApi().then((result) => {
   userInf.value = result.data.resultData;
@@ -61,10 +66,17 @@ const select = () => {
     alert("搜索内容不能为空");
     return;
   } else {
-    route.push({
-      path: "/Search",
-      query: { type: inputValue.value, keyWord: searchValue.value },
-    });
+    if ((inputValue.value == "") | (inputValue.value == 1)) {
+      route.push({
+        path: "/Search",
+        query: { type: 1, keyWord: searchValue.value },
+      });
+    } else if (inputValue.value == 2) {
+      route.push({
+        path: "/Search",
+        query: { type: 2, keyWord: searchValue.value },
+      });
+    }
   }
 };
 </script>
