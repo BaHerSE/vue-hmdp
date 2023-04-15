@@ -2,6 +2,11 @@
   <div class="work">
     <div class="work-left">
       <t-menu>
+        <span>
+          <router-link :to="{ path: '/Admin/index' }" class="sy">
+            首页
+          </router-link>
+        </span>
         <t-submenu value="1" title="用户信息">
           <template #icon>
             <t-icon name="user-circle" />
@@ -29,6 +34,13 @@
             <span>
               <router-link :to="{ path: '/Admin/index/adminMovie' }">
                 电影
+              </router-link>
+            </span>
+          </t-menu-item>
+          <t-menu-item value="2-2">
+            <span>
+              <router-link :to="{ path: '/Admin/index/adminSource' }">
+                电影片源
               </router-link>
             </span>
           </t-menu-item>
@@ -65,6 +77,12 @@
 </script>
 
 <style scoped>
+.sy {
+  color: var(--td-font-gray-2);
+  line-height: 36px;
+  text-decoration: none;
+  margin-left: 45px;
+}
 .work {
   display: flex;
 }

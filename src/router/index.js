@@ -31,6 +31,7 @@ import adminAdmin from '../components/element/admin-admin.vue'
 import adminCinecism from '../components/element/admin-cinecism.vue'
 import adminDiscuss from '../components/element/admin-discuss.vue'
 import adminBlog from '../components/element/admin-blog.vue'
+import adminSource from '../components/element/admin-source.vue'
 import allCinecism from '../components/AllCinecism.vue'
 import allBlog from '../components/AllBlog.vue'
 import genreSearch from '../components/GenreSearch.vue'
@@ -186,6 +187,9 @@ const router = createRouter({
                 },
                 {
                     path: 'adminCinecism', component: adminCinecism
+                },
+                {
+                    path: 'adminSource', component: adminSource
                 }
             ]
         }

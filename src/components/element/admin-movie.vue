@@ -235,7 +235,6 @@ let OPTIONS = [
   // { label: "恐怖", value: 15 },
 ];
 for (let index = 0; index < typeList.length; index++) {
-  console.log(typeList[index].type);
   OPTIONS.push({ label: typeList[index].type, value: typeList[index].id });
 }
 const excessTagsDisplayType = ref("scroll");
@@ -272,7 +271,6 @@ const onCheckedChange = (val, { current, type }) => {
 };
 // 可以根据触发来源，自由定制标签变化时的筛选器行为
 const onTagChange = (currentTags, context) => {
-  console.log(currentTags, context);
   const { trigger, index, item } = context;
   if (trigger === "clear") {
     value.value = [];
